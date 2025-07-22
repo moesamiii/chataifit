@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'analytics_screen.dart';
-import 'profile_screen.dart'; // ✅ Add this import for your Profile tab
+import 'profile_screen.dart';
+import 'chat_screen.dart'; // ✅ Real AI chat screen
 
 class MainScreen extends StatefulWidget {
   const MainScreen({super.key});
@@ -15,9 +16,9 @@ class _MainScreenState extends State<MainScreen> {
   final List<Widget> _screens = [
     const Center(child: Text("Workout Screen")),
     const AnalyticsScreen(),
-    const Center(child: Text("Chat Screen")),
+    const ChatScreen(), // ✅ AI Chat
     const Center(child: Text("Social Screen")),
-    const ProfileScreen(), // ✅ Use the real ProfileScreen here
+    const ProfileScreen(),
   ];
 
   @override
