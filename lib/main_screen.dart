@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'analytics_screen.dart'; // ✅ Import your real screen
+import 'analytics_screen.dart';
+import 'profile_screen.dart'; // ✅ Add this import for your Profile tab
 
 class MainScreen extends StatefulWidget {
   const MainScreen({super.key});
@@ -13,10 +14,10 @@ class _MainScreenState extends State<MainScreen> {
 
   final List<Widget> _screens = [
     const Center(child: Text("Workout Screen")),
-    const AnalyticsScreen(), // ✅ Use the real screen here
+    const AnalyticsScreen(),
     const Center(child: Text("Chat Screen")),
     const Center(child: Text("Social Screen")),
-    const Center(child: Text("Profile Screen")),
+    const ProfileScreen(), // ✅ Use the real ProfileScreen here
   ];
 
   @override
