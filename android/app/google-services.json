@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "922705370260",
+    "project_id": "flutter-pro-firebase-37300",
+    "storage_bucket": "flutter-pro-firebase-37300.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:922705370260:android:e8940ee5f70873ebaa6881",
+        "android_client_info": {
+          "package_name": "com.example.fitness"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCnYaHPS1-F1RkIb2cXo9sGuNeiuDOSKU4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
