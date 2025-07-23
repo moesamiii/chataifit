@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'dart:math';
+import 'quit_smoking_screen.dart';
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({super.key});
@@ -13,7 +13,7 @@ class ProfileScreen extends StatelessWidget {
 
     List<Widget> dayWidgets = [];
 
-    // Add empty boxes before first day of month
+    // Fill empty boxes before first day
     for (int i = 1; i < startWeekday; i++) {
       dayWidgets.add(const SizedBox());
     }
@@ -43,11 +43,19 @@ class ProfileScreen extends StatelessWidget {
         padding: const EdgeInsets.all(16),
         child: Column(
           children: [
+            // 👤 Avatar with initials
             const CircleAvatar(
               radius: 50,
-              backgroundImage: AssetImage('assets/images/avatar_placeholder.png'),
+              backgroundColor: Colors.blue,
+              child: Text(
+                'AB', // Replace with dynamic initials if needed
+                style: TextStyle(color: Colors.white, fontSize: 24),
+              ),
             ),
+
             const SizedBox(height: 16),
+
+            // 📊 Stats
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: const [
@@ -56,7 +64,10 @@ class ProfileScreen extends StatelessWidget {
                 _StatCard(title: 'Completed', value: '5'),
               ],
             ),
+
             const SizedBox(height: 20),
+
+            // 📅 Calendar
             const Align(
               alignment: Alignment.centerLeft,
               child: Text(
@@ -70,6 +81,20 @@ class ProfileScreen extends StatelessWidget {
               shrinkWrap: true,
               physics: const NeverScrollableScrollPhysics(),
               children: dayWidgets,
+            ),
+
+            const SizedBox(height: 30),
+
+            // 🚭 Quit Smoking Button
+            ElevatedButton.icon(
+              icon: const Icon(Icons.smoke_free),
+              label: const Text('Quit Smoking'),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (_) => const QuitSmokingScreen()),
+                );
+              },
             ),
           ],
         ),
