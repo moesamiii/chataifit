@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'analytics_screen.dart';
 import 'profile_screen.dart';
 import 'chat_screen.dart'; // ✅ Real AI chat screen
+import 'food_screen.dart'; // 🍎 New Food Tracker screen
 
 class MainScreen extends StatefulWidget {
   const MainScreen({super.key});
@@ -16,8 +17,8 @@ class _MainScreenState extends State<MainScreen> {
   final List<Widget> _screens = [
     const Center(child: Text("Workout Screen")),
     const AnalyticsScreen(),
-    const ChatScreen(), // ✅ AI Chat
-    const Center(child: Text("Social Screen")),
+    const ChatScreen(),
+    const FoodScreen(), // 🍎 New screen
     const ProfileScreen(),
   ];
 
@@ -35,7 +36,7 @@ class _MainScreenState extends State<MainScreen> {
           BottomNavigationBarItem(icon: Icon(Icons.fitness_center), label: 'Workout'),
           BottomNavigationBarItem(icon: Icon(Icons.bar_chart), label: 'Analytics'),
           BottomNavigationBarItem(icon: Icon(Icons.chat), label: 'Chat'),
-          BottomNavigationBarItem(icon: Icon(Icons.group), label: 'Social'),
+          BottomNavigationBarItem(icon: Icon(Icons.restaurant), label: 'Food'), // 🍎
           BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profile'),
         ],
       ),
