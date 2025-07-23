@@ -3,6 +3,8 @@ import 'analytics_screen.dart';
 import 'profile_screen.dart';
 import 'chat_screen.dart'; // ✅ Real AI chat screen
 import 'food_screen.dart'; // 🍎 New Food Tracker screen
+import 'workout_screen.dart';
+
 
 class MainScreen extends StatefulWidget {
   const MainScreen({super.key});
@@ -15,7 +17,7 @@ class _MainScreenState extends State<MainScreen> {
   int _currentIndex = 0;
 
   final List<Widget> _screens = [
-    const Center(child: Text("Workout Screen")),
+    const WorkoutScreen(),
     const AnalyticsScreen(),
     const ChatScreen(),
     const FoodScreen(), // 🍎 New screen
