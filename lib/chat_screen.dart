@@ -1,6 +1,9 @@
+import 'dart:convert';
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'openai_service.dart'; // Still using this file name
+import 'openai_service.dart';
+import 'inbody_upload_screen.dart';
 
 class ChatScreen extends StatefulWidget {
   const ChatScreen({super.key});
@@ -30,6 +33,35 @@ class _ChatScreenState extends State<ChatScreen> {
       _messages.add({'role': 'assistant', 'content': reply});
       _isLoading = false;
     });
+  }
+
+  Future<void> _handleInBodyUpload() async {
+    final File? image = await Navigator.push(
+      context,
+      MaterialPageRoute(builder: (_) => const InBodyUploadScreen()),
+    );
+
+    if (image != null) {
+      setState(() {
+        _messages.add({'role': 'user', 'content': '[Uploaded InBody Image]'});
+        _isLoading = true;
+      });
+
+      final bytes = await image.readAsBytes();
+      final base64Image = base64Encode(bytes);
+
+      final aiPrompt = '''
+I uploaded an InBody scan as a photo. Please analyze the body composition information and give me a detailed interpretation.
+Base64 Image: $base64Image
+''';
+
+      final reply = await sendMessageToGroq(aiPrompt);
+
+      setState(() {
+        _messages.add({'role': 'assistant', 'content': reply});
+        _isLoading = false;
+      });
+    }
   }
 
   @override
@@ -75,6 +107,11 @@ class _ChatScreenState extends State<ChatScreen> {
             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
             child: Row(
               children: [
+                IconButton(
+                  icon: const Icon(Icons.image),
+                  tooltip: 'Upload InBody',
+                  onPressed: _handleInBodyUpload,
+                ),
                 Expanded(
                   child: TextField(
                     controller: _controller,
