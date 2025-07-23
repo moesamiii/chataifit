@@ -5,25 +5,58 @@ class QuitSmokingScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final List<Map<String, dynamic>> tips = [
-      {'icon': Icons.calendar_month, 'text': "Set a quit date and stick to it."},
-      {'icon': Icons.delete_forever, 'text': "Remove cigarettes and ashtrays from your home and car."},
-      {'icon': Icons.healing, 'text': "Use nicotine replacement therapy (patches, gum, etc)."},
-      {'icon': Icons.warning, 'text': "Avoid triggers like alcohol or stress at first."},
-      {'icon': Icons.group, 'text': "Get support from family, friends, or a coach."},
-      {'icon': Icons.fitness_center, 'text': "Exercise regularly to reduce cravings."},
-      {'icon': Icons.lightbulb, 'text': "Stay busy with healthy distractions and hobbies."},
+    final List<Map<String, dynamic>> supplements = [
+      {
+        'name': 'Creatine Monohydrate',
+        'male': '5g daily',
+        'female': '3g daily',
+        'timing': 'Post workout or any time of day',
+        'goal': 'Muscle growth & strength',
+        'icon': Icons.fitness_center
+      },
+      {
+        'name': 'Whey Protein',
+        'male': '1-2 scoops/day',
+        'female': '1 scoop/day',
+        'timing': 'After workout or as meal supplement',
+        'goal': 'Muscle recovery & lean mass',
+        'icon': Icons.sports_mma
+      },
+      {
+        'name': 'Omega-3 (Fish Oil)',
+        'male': '1000mg x2 daily',
+        'female': '1000mg daily',
+        'timing': 'With meals',
+        'goal': 'Heart & joint health',
+        'icon': Icons.favorite
+      },
+      {
+        'name': 'Multivitamins',
+        'male': '1 tablet daily',
+        'female': '1 tablet daily',
+        'timing': 'With breakfast',
+        'goal': 'General wellness',
+        'icon': Icons.local_hospital
+      },
+      {
+        'name': 'L-Carnitine',
+        'male': '500–2000mg/day',
+        'female': '250–1000mg/day',
+        'timing': 'Before cardio or training',
+        'goal': 'Fat metabolism',
+        'icon': Icons.local_fire_department
+      },
     ];
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Quit Smoking"),
+        title: const Text("Supplement Guide"),
         backgroundColor: const Color(0xFF00AEEF), // Rich sky blue
       ),
       body: Container(
         decoration: const BoxDecoration(
           gradient: LinearGradient(
-            colors: [Color(0xFFE3F2FD), Color(0xFFB3E5FC)], // Light sky gradient
+            colors: [Color(0xFFE1F5FE), Color(0xFFB3E5FC)],
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
           ),
@@ -32,40 +65,56 @@ class QuitSmokingScreen extends StatelessWidget {
           padding: const EdgeInsets.all(20),
           children: [
             const Text(
-              "You're making a powerful choice 💪",
+              "💊 How to Use Supplements Effectively",
               style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: 8),
             const Text(
-              "\"Every journey begins with a single step. This is yours.\"",
-              style: TextStyle(fontSize: 16, fontStyle: FontStyle.italic),
+              "Smart supplementation can boost your health & performance. Follow these tailored guidelines 👇",
+              style: TextStyle(fontSize: 16),
               textAlign: TextAlign.center,
             ),
-            const SizedBox(height: 24),
+            const SizedBox(height: 20),
 
-            // Tips List
-            ...tips.map((tip) => Card(
+            ...supplements.map((item) => Card(
               color: Colors.white,
               elevation: 3,
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-              margin: const EdgeInsets.symmetric(vertical: 8),
-              child: ListTile(
-                leading: Icon(tip['icon'] as IconData, color: Color(0xFF00AEEF)),
-                title: Text(
-                  tip['text'] as String,
-                  style: const TextStyle(fontSize: 16),
+              margin: const EdgeInsets.symmetric(vertical: 10),
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+              child: Padding(
+                padding: const EdgeInsets.all(16),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        Icon(item['icon'], color: const Color(0xFF00AEEF)),
+                        const SizedBox(width: 8),
+                        Text(
+                          item['name'],
+                          style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 12),
+                    Text("👨 Male Dosage: ${item['male']}"),
+                    const SizedBox(height: 4),
+                    Text("👩 Female Dosage: ${item['female']}"),
+                    const SizedBox(height: 8),
+                    Text("⏰ When to Take: ${item['timing']}"),
+                    const SizedBox(height: 4),
+                    Text("🎯 Goal: ${item['goal']}"),
+                  ],
                 ),
               ),
             )),
 
             const SizedBox(height: 24),
-
-            // Bonus Motivation
             const Text(
-              "You're not alone. Millions have quit successfully — and so can you!",
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+              "⚠️ Always consult your doctor or coach before starting a new supplement routine.",
               textAlign: TextAlign.center,
+              style: TextStyle(fontSize: 14, fontStyle: FontStyle.italic),
             ),
           ],
         ),

@@ -88,7 +88,7 @@ class ProfileScreen extends StatelessWidget {
             // 🚭 Quit Smoking Button
             ElevatedButton.icon(
               icon: const Icon(Icons.smoke_free),
-              label: const Text('Quit Smoking'),
+              label: const Text('Supplements guide'),
               onPressed: () {
                 Navigator.push(
                   context,
