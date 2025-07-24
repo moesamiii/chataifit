@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'quit_smoking_screen.dart';
+import 'login_page.dart'; // ⬅️ Required for logout redirection
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({super.key});
@@ -85,15 +87,55 @@ class ProfileScreen extends StatelessWidget {
 
             const SizedBox(height: 30),
 
-            // 🚭 Quit Smoking Button
+            // 🚭 Supplements Guide Button
             ElevatedButton.icon(
               icon: const Icon(Icons.smoke_free),
-              label: const Text('Supplements guide'),
+              label: const Text('Supplements Guide'),
               onPressed: () {
                 Navigator.push(
                   context,
                   MaterialPageRoute(builder: (_) => const QuitSmokingScreen()),
                 );
+              },
+            ),
+
+            const SizedBox(height: 20),
+
+            // 🔓 Logout Button
+            ElevatedButton.icon(
+              icon: const Icon(Icons.logout),
+              label: const Text("Logout"),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.redAccent,
+                foregroundColor: Colors.white,
+              ),
+              onPressed: () async {
+                final confirm = await showDialog<bool>(
+                  context: context,
+                  builder: (ctx) => AlertDialog(
+                    title: const Text("Confirm Logout"),
+                    content: const Text("Are you sure you want to logout?"),
+                    actions: [
+                      TextButton(
+                        onPressed: () => Navigator.pop(ctx, false),
+                        child: const Text("Cancel"),
+                      ),
+                      TextButton(
+                        onPressed: () => Navigator.pop(ctx, true),
+                        child: const Text("Logout"),
+                      ),
+                    ],
+                  ),
+                );
+
+                if (confirm == true) {
+                  await FirebaseAuth.instance.signOut();
+                  Navigator.pushAndRemoveUntil(
+                    context,
+                    MaterialPageRoute(builder: (_) => const LoginPage()),
+                    (route) => false,
+                  );
+                }
               },
             ),
           ],
