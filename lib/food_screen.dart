@@ -8,7 +8,7 @@ class FoodScreen extends StatefulWidget {
 }
 
 class _FoodScreenState extends State<FoodScreen> {
-  final List<Map<String, dynamic>> foodItems = [
+  final List<Map<String, dynamic>> _allFoodItems = [
     {'name': 'Apple (1 medium)', 'calories': 95},
     {'name': 'Banana (1 medium)', 'calories': 105},
     {'name': 'Chicken Breast (100g)', 'calories': 165},
@@ -19,21 +19,48 @@ class _FoodScreenState extends State<FoodScreen> {
     {'name': 'Water (0 cal)', 'calories': 0},
     {'name': 'Protein Shake (1 scoop)', 'calories': 120},
     {'name': 'Salad (mixed, 1 bowl)', 'calories': 80},
+
+    // 🥞 Canadian-style foods and drinks
+    {'name': 'Poutine (1 serving)', 'calories': 740},
+    {'name': 'Maple Syrup (2 tbsp)', 'calories': 104},
+    {'name': 'Tim Hortons Coffee (medium double-double)', 'calories': 140},
+    {'name': 'Butter Tart (1 piece)', 'calories': 220},
+    {'name': 'BeaverTail (1 piece)', 'calories': 300},
+    {'name': 'Montreal Smoked Meat Sandwich', 'calories': 410},
+    {'name': 'Caesar Cocktail (1 glass)', 'calories': 150},
+    {'name': 'Tim Hortons Iced Capp (medium)', 'calories': 360},
+    {'name': 'Ketchup Chips (small bag)', 'calories': 260},
+    {'name': 'Nanaimo Bar (1 square)', 'calories': 220},
+    {'name': 'Peameal Bacon (2 slices)', 'calories': 100},
+    {'name': 'Canadian Bacon Pizza (1 slice)', 'calories': 285},
+    {'name': 'Oatmeal (1 bowl)', 'calories': 150},
+    {'name': 'Greek Yogurt (plain, 170g)', 'calories': 100},
+    {'name': 'Smoothie (homemade, 1 cup)', 'calories': 180},
   ];
 
+  List<Map<String, dynamic>> _filteredItems = [];
   final Set<int> selectedIndexes = {};
   int totalCalories = 0;
+  String searchQuery = '';
+
+  @override
+  void initState() {
+    super.initState();
+    _filteredItems = List.from(_allFoodItems);
+  }
 
   void _toggleItem(int index) {
     setState(() {
-      final itemCalories = foodItems[index]['calories'];
+      final itemCalories = _filteredItems[index]['calories'];
       final calories = (itemCalories is int) ? itemCalories : (itemCalories as num).toInt();
 
-      if (selectedIndexes.contains(index)) {
-        selectedIndexes.remove(index);
+      final globalIndex = _allFoodItems.indexOf(_filteredItems[index]);
+
+      if (selectedIndexes.contains(globalIndex)) {
+        selectedIndexes.remove(globalIndex);
         totalCalories -= calories;
       } else {
-        selectedIndexes.add(index);
+        selectedIndexes.add(globalIndex);
         totalCalories += calories;
       }
     });
@@ -46,29 +73,52 @@ class _FoodScreenState extends State<FoodScreen> {
     });
   }
 
+  void _filterItems(String query) {
+    setState(() {
+      searchQuery = query.toLowerCase();
+      _filteredItems = _allFoodItems.where((item) {
+        return item['name'].toLowerCase().contains(searchQuery);
+      }).toList();
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text("Food Tracker")),
       body: Column(
         children: [
-          Expanded(
-            child: ListView.builder(
-              itemCount: foodItems.length,
-              itemBuilder: (context, index) {
-                final item = foodItems[index];
-                final selected = selectedIndexes.contains(index);
-
-                return ListTile(
-                  title: Text(item['name']),
-                  subtitle: Text('${item['calories']} cal'),
-                  trailing: selected
-                      ? const Icon(Icons.check_circle, color: Colors.green)
-                      : const Icon(Icons.add_circle_outline),
-                  onTap: () => _toggleItem(index),
-                );
-              },
+          Padding(
+            padding: const EdgeInsets.all(12),
+            child: TextField(
+              onChanged: _filterItems,
+              decoration: const InputDecoration(
+                hintText: 'Search food or drink...',
+                prefixIcon: Icon(Icons.search),
+                border: OutlineInputBorder(),
+              ),
             ),
+          ),
+          Expanded(
+            child: _filteredItems.isEmpty
+                ? const Center(child: Text("No items match your search."))
+                : ListView.builder(
+                    itemCount: _filteredItems.length,
+                    itemBuilder: (context, index) {
+                      final item = _filteredItems[index];
+                      final globalIndex = _allFoodItems.indexOf(item);
+                      final selected = selectedIndexes.contains(globalIndex);
+
+                      return ListTile(
+                        title: Text(item['name']),
+                        subtitle: Text('${item['calories']} cal'),
+                        trailing: selected
+                            ? const Icon(Icons.check_circle, color: Colors.green)
+                            : const Icon(Icons.add_circle_outline),
+                        onTap: () => _toggleItem(index),
+                      );
+                    },
+                  ),
           ),
           Padding(
             padding: const EdgeInsets.all(16),
