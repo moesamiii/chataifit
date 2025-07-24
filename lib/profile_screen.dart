@@ -1,10 +1,44 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'quit_smoking_screen.dart';
-import 'login_page.dart'; // ⬅️ Required for logout redirection
+import 'login_page.dart';
 
-class ProfileScreen extends StatelessWidget {
+class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
+
+  @override
+  State<ProfileScreen> createState() => _ProfileScreenState();
+}
+
+class _ProfileScreenState extends State<ProfileScreen> {
+  int streak = 0;
+  int completed = 0;
+  int minutes = 0;
+
+  Future<void> loadStats() async {
+    final prefs = await SharedPreferences.getInstance();
+    final today = DateTime.now();
+    final lastStr = prefs.getString("lastWorkoutDate");
+    final last = lastStr != null ? DateTime.tryParse(lastStr) : null;
+
+    if (last == null || today.difference(last).inHours >= 48) {
+      await prefs.setInt("streak", 0);
+      streak = 0;
+    } else {
+      streak = prefs.getInt("streak") ?? 0;
+    }
+
+    completed = prefs.getInt("completed") ?? 0;
+    minutes = prefs.getInt("minutes") ?? 0;
+    setState(() {});
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    loadStats();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -14,12 +48,9 @@ class ProfileScreen extends StatelessWidget {
     int totalDays = DateTime(today.year, today.month + 1, 0).day;
 
     List<Widget> dayWidgets = [];
-
-    // Fill empty boxes before first day
     for (int i = 1; i < startWeekday; i++) {
       dayWidgets.add(const SizedBox());
     }
-
     for (int day = 1; day <= totalDays; day++) {
       final isToday = today.day == day;
       dayWidgets.add(Container(
@@ -45,37 +76,24 @@ class ProfileScreen extends StatelessWidget {
         padding: const EdgeInsets.all(16),
         child: Column(
           children: [
-            // 👤 Avatar with initials
             const CircleAvatar(
               radius: 50,
               backgroundColor: Colors.blue,
-              child: Text(
-                'AB', // Replace with dynamic initials if needed
-                style: TextStyle(color: Colors.white, fontSize: 24),
-              ),
+              child: Text('AB', style: TextStyle(color: Colors.white, fontSize: 24)),
             ),
-
             const SizedBox(height: 16),
-
-            // 📊 Stats
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: const [
-                _StatCard(title: 'Streak', value: '7'),
-                _StatCard(title: 'Workout Min', value: '120'),
-                _StatCard(title: 'Completed', value: '5'),
+              children: [
+                _StatCard(title: 'Streak', value: streak.toString()),
+                _StatCard(title: 'Workout Min', value: minutes.toString()),
+                _StatCard(title: 'Completed', value: completed.toString()),
               ],
             ),
-
             const SizedBox(height: 20),
-
-            // 📅 Calendar
             const Align(
               alignment: Alignment.centerLeft,
-              child: Text(
-                "Calendar",
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-              ),
+              child: Text("Calendar", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
             ),
             const SizedBox(height: 10),
             GridView.count(
@@ -84,10 +102,7 @@ class ProfileScreen extends StatelessWidget {
               physics: const NeverScrollableScrollPhysics(),
               children: dayWidgets,
             ),
-
             const SizedBox(height: 30),
-
-            // 🚭 Supplements Guide Button
             ElevatedButton.icon(
               icon: const Icon(Icons.smoke_free),
               label: const Text('Supplements Guide'),
@@ -98,10 +113,7 @@ class ProfileScreen extends StatelessWidget {
                 );
               },
             ),
-
             const SizedBox(height: 20),
-
-            // 🔓 Logout Button
             ElevatedButton.icon(
               icon: const Icon(Icons.logout),
               label: const Text("Logout"),
