@@ -70,28 +70,41 @@ class _WorkoutScreenState extends State<WorkoutScreen> {
 
   Future<void> _completeWorkout(int duration) async {
     final prefs = await SharedPreferences.getInstance();
-    final today = DateTime.now();
-    final todayStr = "${today.year}-${today.month}-${today.day}";
+    final now = DateTime.now();
 
-    String? lastDate = prefs.getString("lastWorkoutDate");
+    // ✅ Correct date format: "YYYY-MM-DD"
+    final todayStr = "${now.year}-${now.month.toString().padLeft(2, '0')}-${now.day.toString().padLeft(2, '0')}";
+
+    String? lastWorkoutDate = prefs.getString("lastWorkoutDate");
+    String? streakUpdatedFor = prefs.getString("streakUpdatedFor");
     int streak = prefs.getInt("streak") ?? 0;
     int completed = prefs.getInt("completed") ?? 0;
     int minutes = prefs.getInt("minutes") ?? 0;
 
-    if (lastDate != todayStr) {
-      DateTime? lastWorkout = lastDate != null ? DateTime.parse(lastDate) : null;
-      if (lastWorkout != null &&
-          today.difference(lastWorkout).inHours >= 48) {
-        streak = 1; // reset streak if more than 1 day passed
-      } else {
-        streak += 1;
+    // Reset streak if no workout for 48+ hours
+    if (lastWorkoutDate != null) {
+      try {
+        final lastDate = DateTime.parse(lastWorkoutDate);
+        final hours = now.difference(lastDate).inHours;
+        if (hours >= 48) {
+          streak = 0;
+          await prefs.setInt("streak", 0);
+        }
+      } catch (_) {
+        // ignore if parse fails
       }
-      prefs.setString("lastWorkoutDate", todayStr);
     }
 
-    prefs.setInt("streak", streak);
-    prefs.setInt("completed", completed + 1);
-    prefs.setInt("minutes", minutes + duration);
+    // Increase streak if not already done today
+    if (streakUpdatedFor != todayStr) {
+      streak += 1;
+      await prefs.setInt("streak", streak);
+      await prefs.setString("streakUpdatedFor", todayStr);
+    }
+
+    await prefs.setString("lastWorkoutDate", todayStr);
+    await prefs.setInt("completed", completed + 1);
+    await prefs.setInt("minutes", minutes + duration);
 
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(content: Text("Workout marked as complete!")),
