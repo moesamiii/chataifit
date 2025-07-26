@@ -104,7 +104,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             ),
             const SizedBox(height: 30),
             ElevatedButton.icon(
-              icon: const Icon(Icons.smoke_free),
+              icon: const Icon(Icons.medication), // or try Icons.local_pharmacy
               label: const Text('Supplements Guide'),
               onPressed: () {
                 Navigator.push(
