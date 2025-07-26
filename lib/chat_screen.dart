@@ -17,6 +17,20 @@ class _ChatScreenState extends State<ChatScreen> {
   final List<Map<String, String>> _messages = [];
   bool _isLoading = false;
 
+  @override
+  void initState() {
+    super.initState();
+    // Add a welcoming message from the assistant
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      setState(() {
+        _messages.add({
+          'role': 'assistant',
+          'content': 'Welcome! I\'m your AI fitness coach. You can ask me anything about workouts, nutrition, or upload your InBody scan for analysis.'
+        });
+      });
+    });
+  }
+
   Future<void> _sendMessage() async {
     final text = _controller.text.trim();
     if (text.isEmpty) return;
