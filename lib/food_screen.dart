@@ -9,33 +9,21 @@ class FoodScreen extends StatefulWidget {
 
 class _FoodScreenState extends State<FoodScreen> {
   final List<Map<String, dynamic>> _allFoodItems = [
-    {'name': 'Apple (1 medium)', 'calories': 95},
-    {'name': 'Banana (1 medium)', 'calories': 105},
-    {'name': 'Chicken Breast (100g)', 'calories': 165},
-    {'name': 'Rice (1 cup)', 'calories': 206},
-    {'name': 'Egg (1 large)', 'calories': 78},
-    {'name': 'Avocado (half)', 'calories': 120},
+    {'name': 'Apple', 'calories': 95},
+    {'name': 'Banana', 'calories': 105},
     {'name': 'Orange Juice (1 cup)', 'calories': 112},
-    {'name': 'Water (0 cal)', 'calories': 0},
-    {'name': 'Protein Shake (1 scoop)', 'calories': 120},
-    {'name': 'Salad (mixed, 1 bowl)', 'calories': 80},
-
-    // 🥞 Canadian-style foods and drinks
-    {'name': 'Poutine (1 serving)', 'calories': 740},
-    {'name': 'Maple Syrup (2 tbsp)', 'calories': 104},
-    {'name': 'Tim Hortons Coffee (medium double-double)', 'calories': 140},
-    {'name': 'Butter Tart (1 piece)', 'calories': 220},
-    {'name': 'BeaverTail (1 piece)', 'calories': 300},
-    {'name': 'Montreal Smoked Meat Sandwich', 'calories': 410},
-    {'name': 'Caesar Cocktail (1 glass)', 'calories': 150},
-    {'name': 'Tim Hortons Iced Capp (medium)', 'calories': 360},
-    {'name': 'Ketchup Chips (small bag)', 'calories': 260},
-    {'name': 'Nanaimo Bar (1 square)', 'calories': 220},
-    {'name': 'Peameal Bacon (2 slices)', 'calories': 100},
-    {'name': 'Canadian Bacon Pizza (1 slice)', 'calories': 285},
-    {'name': 'Oatmeal (1 bowl)', 'calories': 150},
-    {'name': 'Greek Yogurt (plain, 170g)', 'calories': 100},
-    {'name': 'Smoothie (homemade, 1 cup)', 'calories': 180},
+    {'name': 'Chicken Breast (100g)', 'calories': 165},
+    {'name': 'Boiled Egg', 'calories': 78},
+    {'name': 'Steamed Broccoli (1 cup)', 'calories': 55},
+    {'name': 'Rice (1 cup)', 'calories': 206},
+    {'name': 'Grilled Salmon (100g)', 'calories': 208},
+    {'name': 'Oatmeal (1 cup)', 'calories': 158},
+    {'name': 'Greek Yogurt (plain)', 'calories': 100},
+    {'name': 'Avocado (half)', 'calories': 120},
+    {'name': 'Protein Shake', 'calories': 250},
+    {'name': 'Almonds (10 pcs)', 'calories': 70},
+    {'name': 'Peanut Butter (1 tbsp)', 'calories': 94},
+    {'name': 'Whole Wheat Bread (1 slice)', 'calories': 80},
   ];
 
   List<Map<String, dynamic>> _filteredItems = [];
