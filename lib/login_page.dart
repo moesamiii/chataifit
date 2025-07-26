@@ -31,6 +31,19 @@ class _LoginPageState extends State<LoginPage> {
     }
   }
 
+  // ✅ New: Anonymous Login
+  Future<void> _loginAnonymously() async {
+    try {
+      await FirebaseAuth.instance.signInAnonymously();
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (_) => const MainScreen()),
+      );
+    } on FirebaseAuthException catch (e) {
+      setState(() => error = e.message);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -53,6 +66,13 @@ class _LoginPageState extends State<LoginPage> {
               onPressed: _login,
               child: const Text('Login'),
             ),
+            const SizedBox(height: 8),
+            // ✅ New Anonymous Login Button
+            OutlinedButton(
+              onPressed: _loginAnonymously,
+              child: const Text('Continue as Guest'),
+            ),
+            const SizedBox(height: 8),
             TextButton(
               onPressed: () => Navigator.push(
                 context,
