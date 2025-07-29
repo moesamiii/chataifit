@@ -10,11 +10,12 @@ class AnalyticsScreen extends StatefulWidget {
 class _AnalyticsScreenState extends State<AnalyticsScreen> with SingleTickerProviderStateMixin {
   late TabController _tabController;
 
-  // Calorie Calculator controllers and state
   final heightController = TextEditingController();
   final weightController = TextEditingController();
   final ageController = TextEditingController();
   final equipmentController = TextEditingController();
+
+  final ScrollController _calorieScrollController = ScrollController();
 
   String gender = 'Male';
   String goal = 'Muscle Gain';
@@ -26,10 +27,7 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> with SingleTickerProv
 
   double? calories;
 
-  // Water tracker
   int waterGlasses = 0;
-
-  // Step tracker
   int stepsToday = 0;
 
   @override
@@ -56,15 +54,33 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> with SingleTickerProv
         'Very Active': 1.9,
       }[activityLevel]!;
 
-      double goalAdjustment = (goal == 'Muscle Gain') ? 500 : -500;
       double healthAdjustment = 0;
-      if (injury == 'Yes') healthAdjustment -= 100;
+      if (injury == 'Yes') healthAdjustment -= 150;
       if (breathLevel == 'Low') healthAdjustment -= 100;
+      if (trainingPlace == 'Gym') healthAdjustment += 50;
+      if (equipmentController.text.toLowerCase().contains("dumbbell")) {
+        healthAdjustment += 25;
+      }
+
+      double goalAdjustment = 0;
+      if (goal == 'Muscle Gain') {
+        goalAdjustment = 400;
+      } else if (goal == 'Weight Loss') {
+        goalAdjustment = -400;
+      }
 
       double totalCalories = (bmr * activityMultiplier) + goalAdjustment + healthAdjustment;
 
       setState(() {
         calories = totalCalories;
+      });
+
+      Future.delayed(const Duration(milliseconds: 300), () {
+        _calorieScrollController.animateTo(
+          _calorieScrollController.position.maxScrollExtent,
+          duration: const Duration(milliseconds: 500),
+          curve: Curves.easeOut,
+        );
       });
     }
   }
@@ -80,11 +96,12 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> with SingleTickerProv
 
   Widget _buildCalorieTab() {
     return SingleChildScrollView(
+      controller: _calorieScrollController,
       padding: const EdgeInsets.all(16),
       child: Column(
         children: [
           _buildDropdown('Gender', gender, ['Male', 'Female'], (v) => setState(() => gender = v!)),
-          _buildDropdown('Goal', goal, ['Muscle Gain', 'Weight Loss'], (v) => setState(() => goal = v!)),
+          _buildDropdown('Goal', goal, ['Muscle Gain', 'Weight Loss', 'Maintenance'], (v) => setState(() => goal = v!)),
           TextField(controller: ageController, decoration: const InputDecoration(labelText: 'Age'), keyboardType: TextInputType.number),
           TextField(controller: heightController, decoration: const InputDecoration(labelText: 'Height (cm)'), keyboardType: TextInputType.number),
           TextField(controller: weightController, decoration: const InputDecoration(labelText: 'Weight (kg)'), keyboardType: TextInputType.number),
@@ -113,7 +130,24 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> with SingleTickerProv
           ElevatedButton(onPressed: _calculateCalories, child: const Text('Calculate Calories')),
           const SizedBox(height: 20),
           if (calories != null)
-            Text('Estimated Daily Calories: ${calories!.toStringAsFixed(0)} kcal', style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+            Container(
+              width: double.infinity,
+              padding: const EdgeInsets.all(16),
+              decoration: BoxDecoration(
+                color: Colors.teal.shade50,
+                border: Border.all(color: Colors.teal.shade300),
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: Column(
+                children: [
+                  const Text('Estimated Daily Calories',
+                      style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+                  const SizedBox(height: 8),
+                  Text('${calories!.toStringAsFixed(0)} kcal',
+                      style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: Colors.teal)),
+                ],
+              ),
+            ),
         ],
       ),
     );
