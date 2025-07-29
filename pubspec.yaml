@@ -34,6 +34,9 @@ dependencies:
   # ✅ Added for saving workout stats like streak and minutes
   shared_preferences: ^2.2.2
 
+  # ✅ Health plugin for Apple Health integration
+  health: ^9.0.0
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

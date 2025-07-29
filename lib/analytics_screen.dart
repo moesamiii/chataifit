@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:health/health.dart';
 
 class AnalyticsScreen extends StatefulWidget {
   const AnalyticsScreen({super.key});
@@ -30,10 +31,58 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> with SingleTickerProv
   int waterGlasses = 0;
   int stepsToday = 0;
 
+  // ✅ Apple Health variables
+  List<HealthDataPoint> _healthData = [];
+  bool _isFetchingHealth = false;
+
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(length: 3, vsync: this);
+    _tabController = TabController(length: 4, vsync: this);
+
+    _tabController.addListener(() {
+      if (_tabController.index == 3) {
+        _fetchHealthData();
+      }
+    });
+  }
+
+  Future<void> _fetchHealthData() async {
+    setState(() => _isFetchingHealth = true);
+
+    final health = HealthFactory();
+    final now = DateTime.now();
+    final yesterday = now.subtract(const Duration(days: 1));
+
+    final types = [
+      HealthDataType.STEPS,
+      HealthDataType.HEART_RATE,
+      HealthDataType.ACTIVE_ENERGY_BURNED,
+    ];
+
+    final authorized = await health.requestAuthorization(types);
+    if (!authorized) {
+      print("❌ Authorization denied");
+      setState(() => _isFetchingHealth = false);
+      return;
+    }
+
+    final data = await health.getHealthDataFromTypes(yesterday, now, types);
+    final cleanData = HealthFactory.removeDuplicates(data);
+
+    setState(() {
+      _healthData = cleanData;
+      _isFetchingHealth = false;
+    });
+  }
+
+  Widget _buildDropdown<T>(String label, T value, List<T> items, ValueChanged<T?> onChanged) {
+    return DropdownButtonFormField<T>(
+      decoration: InputDecoration(labelText: label),
+      value: value,
+      onChanged: onChanged,
+      items: items.map((e) => DropdownMenuItem(value: e, child: Text(e.toString()))).toList(),
+    );
   }
 
   void _calculateCalories() {
@@ -83,15 +132,6 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> with SingleTickerProv
         );
       });
     }
-  }
-
-  Widget _buildDropdown<T>(String label, T value, List<T> items, ValueChanged<T?> onChanged) {
-    return DropdownButtonFormField<T>(
-      decoration: InputDecoration(labelText: label),
-      value: value,
-      onChanged: onChanged,
-      items: items.map((e) => DropdownMenuItem(value: e, child: Text(e.toString()))).toList(),
-    );
   }
 
   Widget _buildCalorieTab() {
@@ -197,6 +237,35 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> with SingleTickerProv
     );
   }
 
+  Widget _buildHealthTab() {
+    return Padding(
+      padding: const EdgeInsets.all(16),
+      child: _isFetchingHealth
+          ? const Center(child: CircularProgressIndicator())
+          : Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text('Apple Health Data', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                const SizedBox(height: 12),
+                ElevatedButton(onPressed: _fetchHealthData, child: const Text('Refresh Health Data')),
+                const SizedBox(height: 16),
+                Expanded(
+                  child: ListView.builder(
+                    itemCount: _healthData.length,
+                    itemBuilder: (context, index) {
+                      final point = _healthData[index];
+                      return ListTile(
+                        title: Text('${point.typeString}'),
+                        subtitle: Text('${point.value} at ${point.dateFrom}'),
+                      );
+                    },
+                  ),
+                ),
+              ],
+            ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -208,6 +277,7 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> with SingleTickerProv
             Tab(icon: Icon(Icons.local_fire_department), text: 'Calories'),
             Tab(icon: Icon(Icons.local_drink), text: 'Water'),
             Tab(icon: Icon(Icons.directions_walk), text: 'Steps'),
+            Tab(icon: Icon(Icons.favorite), text: 'Health'),
           ],
         ),
       ),
@@ -217,6 +287,7 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> with SingleTickerProv
           _buildCalorieTab(),
           _buildWaterTab(),
           _buildStepsTab(),
+          _buildHealthTab(), // ✅ new Apple Health tab
         ],
       ),
     );
