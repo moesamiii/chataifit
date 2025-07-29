@@ -35,6 +35,16 @@ final Map<String, List<Map<String, dynamic>>> workouts = {
       "duration": 10,
       "howTo": "Start with palms facing you. Rotate wrists while pressing dumbbells overhead."
     },
+    {
+      "name": "Upright Row",
+      "duration": 10,
+      "howTo": "Hold dumbbells and pull them up to chin level, elbows leading the way."
+    },
+    {
+      "name": "Dumbbell Shrugs",
+      "duration": 6,
+      "howTo": "Hold dumbbells at sides and shrug shoulders up and down."
+    },
   ],
   "Biceps": [
     {
@@ -56,6 +66,16 @@ final Map<String, List<Map<String, dynamic>>> workouts = {
       "name": "Zottman Curls",
       "duration": 12,
       "howTo": "Curl up with palms facing up, rotate at the top, lower with palms down."
+    },
+    {
+      "name": "Cross-Body Curls",
+      "duration": 10,
+      "howTo": "Curl each dumbbell toward the opposite shoulder, alternating arms."
+    },
+    {
+      "name": "Incline Dumbbell Curl",
+      "duration": 12,
+      "howTo": "Sit back on an incline bench and perform bicep curls with dumbbells."
     },
   ],
   "Triceps": [
@@ -79,6 +99,11 @@ final Map<String, List<Map<String, dynamic>>> workouts = {
       "duration": 12,
       "howTo": "Press dumbbells close together over chest to target triceps."
     },
+    {
+      "name": "Single-Arm Overhead Extension",
+      "duration": 8,
+      "howTo": "Use one arm to lift a dumbbell overhead and lower behind the head."
+    },
   ],
   "Back": [
     {
@@ -100,6 +125,11 @@ final Map<String, List<Map<String, dynamic>>> workouts = {
       "name": "Renegade Rows",
       "duration": 12,
       "howTo": "In plank, row one dumbbell at a time while stabilizing with the other."
+    },
+    {
+      "name": "Dead Rows",
+      "duration": 10,
+      "howTo": "Start from a deadlift position, then pull dumbbells to your waist."
     },
   ],
   "Chest": [
@@ -123,6 +153,11 @@ final Map<String, List<Map<String, dynamic>>> workouts = {
       "duration": 10,
       "howTo": "Hold dumbbell with both hands, extend arms backward then return over chest."
     },
+    {
+      "name": "Squeeze Press",
+      "duration": 10,
+      "howTo": "Hold dumbbells together and press upward, squeezing them together."
+    },
   ],
   "Abs": [
     {
@@ -145,6 +180,11 @@ final Map<String, List<Map<String, dynamic>>> workouts = {
       "duration": 8,
       "howTo": "Hold dumbbell to one side and bend sideways. Repeat both sides."
     },
+    {
+      "name": "Weighted V-Ups",
+      "duration": 10,
+      "howTo": "Hold dumbbell with both hands and raise arms and legs to meet in the middle."
+    },
   ],
   "Lower Back": [
     {
@@ -156,6 +196,11 @@ final Map<String, List<Map<String, dynamic>>> workouts = {
       "name": "Bird-Dog",
       "duration": 8,
       "howTo": "On all fours, extend opposite arm and leg simultaneously. Hold, then switch."
+    },
+    {
+      "name": "Dumbbell Good Morning",
+      "duration": 10,
+      "howTo": "Hold dumbbells at shoulders, bend at hips with straight back, and return upright."
     },
   ],
   "Glutes": [
@@ -174,6 +219,11 @@ final Map<String, List<Map<String, dynamic>>> workouts = {
       "duration": 10,
       "howTo": "Place dumbbell behind knee and kick leg upward. Repeat each side."
     },
+    {
+      "name": "Step-ups with Dumbbells",
+      "duration": 12,
+      "howTo": "Step onto a raised surface with dumbbells. Alternate legs."
+    },
   ],
   "Quadriceps": [
     {
@@ -191,6 +241,11 @@ final Map<String, List<Map<String, dynamic>>> workouts = {
       "duration": 10,
       "howTo": "Step onto elevated surface with dumbbells. Alternate legs."
     },
+    {
+      "name": "Bulgarian Split Squat",
+      "duration": 12,
+      "howTo": "Place rear foot on bench, squat down with dumbbells in both hands."
+    },
   ],
   "Hamstrings": [
     {
@@ -207,6 +262,11 @@ final Map<String, List<Map<String, dynamic>>> workouts = {
       "name": "Glute Ham Raise (Modified)",
       "duration": 10,
       "howTo": "Kneel with feet secured. Lower torso and pull back using hamstrings."
+    },
+    {
+      "name": "Dumbbell Swings",
+      "duration": 10,
+      "howTo": "Swing dumbbell between legs using hips, similar to kettlebell swing."
     },
   ],
 };
