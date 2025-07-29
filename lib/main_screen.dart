@@ -4,8 +4,7 @@ import 'profile_screen.dart';
 import 'chat_screen.dart'; // ✅ Real AI chat screen
 import 'food_screen.dart'; // 🍎 New Food Tracker screen
 import 'workout_screen.dart';
-
-
+import 'notification_service.dart'; // ✅ Import the notification service
 
 class MainScreen extends StatefulWidget {
   const MainScreen({super.key});
@@ -24,6 +23,17 @@ class _MainScreenState extends State<MainScreen> {
     const FoodScreen(), // 🍎 New screen
     const ProfileScreen(),
   ];
+
+  @override
+  void initState() {
+    super.initState();
+    _initNotification();
+  }
+
+  Future<void> _initNotification() async {
+    await NotificationService.init();
+    await NotificationService.scheduleDailyReminder();
+  }
 
   @override
   Widget build(BuildContext context) {

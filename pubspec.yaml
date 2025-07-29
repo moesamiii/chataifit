@@ -37,6 +37,9 @@ dependencies:
   # ✅ Health plugin for Apple Health integration
   health: ^9.0.0
 
+  # ✅ Local notifications for daily reminders
+  flutter_local_notifications: ^17.1.0
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

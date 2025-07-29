@@ -63,6 +63,15 @@
     <key>NSHealthUpdateUsageDescription</key>
     <string>This app writes your workout stats to Apple Health.</string>
 
+    <!-- ✅ Notification permissions -->
+    <key>UIBackgroundModes</key>
+    <array>
+        <string>fetch</string>
+        <string>remote-notification</string>
+    </array>
+    <key>NSUserNotificationAlertUsageDescription</key>
+    <string>We use notifications to remind you to stay fit and healthy!</string>
+
 </dict>
 </plist>
 
