@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'workout_data.dart';
 
 class WorkoutScreen extends StatefulWidget {
@@ -64,11 +65,9 @@ class _WorkoutScreenState extends State<WorkoutScreen> {
     await prefs.setInt("completed", completed + 1);
     await prefs.setInt("minutes", minutes + duration);
 
-    // Update completed list
     completedToday.add(name);
     await prefs.setStringList("completed_$todayStr", completedToday.toList());
 
-    // Auto scroll to completed item
     _scrollController.animateTo(
       index * 280,
       duration: const Duration(milliseconds: 500),
@@ -79,12 +78,23 @@ class _WorkoutScreenState extends State<WorkoutScreen> {
       SnackBar(content: Text("\u2714\ufe0f $name marked as complete!")),
     );
 
-    setState(() {}); // To update UI for completed check
+    setState(() {});
   }
 
   Future<int> _getStreak() async {
     final prefs = await SharedPreferences.getInstance();
     return prefs.getInt("streak") ?? 0;
+  }
+
+  Future<void> _launchVideoUrl(String url) async {
+    final uri = Uri.parse(url);
+    if (await canLaunchUrl(uri)) {
+      await launchUrl(uri, mode: LaunchMode.externalApplication);
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("Could not launch video.")),
+      );
+    }
   }
 
   @override
@@ -198,7 +208,7 @@ class _WorkoutScreenState extends State<WorkoutScreen> {
                                   style: ElevatedButton.styleFrom(
                                     backgroundColor: isDone
                                         ? Colors.grey
-                                        : Colors.lightBlue, // ✅ Sky blue here
+                                        : Colors.lightBlue,
                                   ),
                                   child: const Text("Done"),
                                 ),
@@ -221,9 +231,22 @@ class _WorkoutScreenState extends State<WorkoutScreen> {
                                 Padding(
                                   padding: const EdgeInsets.all(8.0),
                                   child: Text(exercise['howTo']),
-                                )
+                                ),
                               ],
-                            )
+                            ),
+                            if (exercise['videoUrl'] != null)
+                              Padding(
+                                padding: const EdgeInsets.only(top: 10.0),
+                                child: ElevatedButton.icon(
+                                  onPressed: () =>
+                                      _launchVideoUrl(exercise['videoUrl']),
+                                  icon: const Icon(Icons.play_circle_fill),
+                                  label: const Text("Watch Video"),
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: Colors.redAccent,
+                                  ),
+                                ),
+                              ),
                           ],
                         ),
                       ),
@@ -234,7 +257,8 @@ class _WorkoutScreenState extends State<WorkoutScreen> {
             else
               const Expanded(
                 child: Center(
-                    child: Text("Please select a muscle group to view workouts.")),
+                    child: Text(
+                        "Please select a muscle group to view workouts.")),
               )
           ],
         ),

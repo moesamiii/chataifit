@@ -40,6 +40,9 @@ dependencies:
   # ✅ Local notifications for daily reminders
   flutter_local_notifications: ^17.1.0
 
+  # ✅ Added for opening YouTube video URLs
+  url_launcher: ^6.2.5
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
