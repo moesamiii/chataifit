@@ -29,19 +29,17 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> with SingleTickerProv
   double? calories;
 
   int waterGlasses = 0;
-  int stepsToday = 0;
 
-  // ✅ Apple Health variables
   List<HealthDataPoint> _healthData = [];
   bool _isFetchingHealth = false;
 
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(length: 4, vsync: this);
+    _tabController = TabController(length: 3, vsync: this); // Updated: 3 tabs
 
     _tabController.addListener(() {
-      if (_tabController.index == 3) {
+      if (_tabController.index == 2) {
         _fetchHealthData();
       }
     });
@@ -215,28 +213,6 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> with SingleTickerProv
     );
   }
 
-  Widget _buildStepsTab() {
-    return Padding(
-      padding: const EdgeInsets.all(16),
-      child: Column(
-        children: [
-          const Text('Step Tracker', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-          const SizedBox(height: 16),
-          Text('Steps today: $stepsToday', style: const TextStyle(fontSize: 16)),
-          const SizedBox(height: 12),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              ElevatedButton(onPressed: () => setState(() => stepsToday += 500), child: const Text('+500 Steps')),
-              const SizedBox(width: 12),
-              ElevatedButton(onPressed: () => setState(() => stepsToday = 0), child: const Text('Reset')),
-            ],
-          ),
-        ],
-      ),
-    );
-  }
-
   Widget _buildHealthTab() {
     return Padding(
       padding: const EdgeInsets.all(16),
@@ -276,7 +252,6 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> with SingleTickerProv
           tabs: const [
             Tab(icon: Icon(Icons.local_fire_department), text: 'Calories'),
             Tab(icon: Icon(Icons.local_drink), text: 'Water'),
-            Tab(icon: Icon(Icons.directions_walk), text: 'Steps'),
             Tab(icon: Icon(Icons.favorite), text: 'Health'),
           ],
         ),
@@ -286,8 +261,7 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> with SingleTickerProv
         children: [
           _buildCalorieTab(),
           _buildWaterTab(),
-          _buildStepsTab(),
-          _buildHealthTab(), // ✅ new Apple Health tab
+          _buildHealthTab(), // Apple Health tab remains
         ],
       ),
     );
